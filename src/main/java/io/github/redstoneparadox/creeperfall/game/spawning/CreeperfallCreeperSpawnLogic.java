@@ -6,6 +6,7 @@ import io.github.redstoneparadox.creeperfall.game.config.CreeperfallConfig;
 import io.github.redstoneparadox.creeperfall.game.map.CreeperfallMap;
 import io.github.redstoneparadox.creeperfall.game.util.EntityTracker;
 import io.github.redstoneparadox.creeperfall.game.util.Timer;
+import io.github.redstoneparadox.creeperfall.models.CreeperModel;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -28,7 +29,7 @@ public class CreeperfallCreeperSpawnLogic {
 	private int currentStage = 1;
 	private boolean spawnedFirstWave = false;
 
-	public CreeperfallCreeperSpawnLogic(GameSpace gameSpace, ServerWorld world, CreeperfallActive game, CreeperfallMap map, CreeperfallConfig config, EntityTracker tracker) {
+    public CreeperfallCreeperSpawnLogic(GameSpace gameSpace, ServerWorld world, CreeperfallActive game, CreeperfallMap map, CreeperfallConfig config, EntityTracker tracker) {
 		this.gameSpace = gameSpace;
 		this.world = world;
 		this.game = game;
@@ -53,6 +54,7 @@ public class CreeperfallCreeperSpawnLogic {
 			spawnCreepers();
 			spawnedFirstWave = true;
 		}
+
 
 		creeperIncreaseTimer.tick();
 		spawnTimer.tick();
@@ -92,6 +94,12 @@ public class CreeperfallCreeperSpawnLogic {
 
 		CreeperEntity entity = new CreeperfallCreeperEntity(this.world, config.creeperConfig.fallSpeedMultiplier, 0.02, 0.02);
 
+		if (currentStage >= config.creeperConfig.chargedSpawnStage) {        // Randomise charged creepers
+            int chargedPercent = config.creeperConfig.chargedSpawnPercent;
+            if (chargedPercent >= random.nextInt(100)) {
+				((CreeperModel) entity).charge();
+			}
+		}
 		entity.setHealth(0.5f);
 		game.spawnEntity(entity, x, y, z, SpawnReason.NATURAL);
 	}

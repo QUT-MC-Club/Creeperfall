@@ -25,7 +25,9 @@
     "spawn_count_increment": 0.7,
     "spawn_delay_secs": 4,
     "spawn_height": 50,
-    "fall_speed_multiplier": 0.75
+    "fall_speed_multiplier": 0.75,
+    "charged_spawn_percent": 35,
+    "charged_spawn_stage": 3
   },
   "time_limit_secs": 200,
   "max_arrows": [4, 8, 12, 16, 20],
