@@ -93,7 +93,7 @@ public class CreeperfallCreeperSpawnLogic {
 
 		CreeperEntity entity = new CreeperfallCreeperEntity(this.world, config.creeperConfig.fallSpeedMultiplier, 0.02, 0.02);
 
-		if (currentStage >= config.creeperConfig.chargedSpawnStage) {
+		if (currentStage >= config.creeperConfig.chargedSpawnStage && config.creeperConfig.chargedSpawnStage != -1) {
 			int chargedPercent = config.creeperConfig.chargedSpawnPercent;
 			if (chargedPercent >= random.nextInt(100)) {
 				((CreeperModel) entity).charge();
