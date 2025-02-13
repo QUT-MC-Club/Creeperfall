@@ -28,7 +28,6 @@ public class CreeperfallCreeperSpawnLogic {
 	private final ServerWorld world;
 	private int currentStage = 1;
 	private boolean spawnedFirstWave = false;
-	private int chargedPercent = 35; // TODO: modify code to consider spawning rate
 
 	public CreeperfallCreeperSpawnLogic(GameSpace gameSpace, ServerWorld world, CreeperfallActive game, CreeperfallMap map, CreeperfallConfig config, EntityTracker tracker) {
 		this.gameSpace = gameSpace;
@@ -72,7 +71,6 @@ public class CreeperfallCreeperSpawnLogic {
 		int minCreepers = playersRemaining;
 		int maxCreepers = MathHelper.floor(currentStage * config.creeperConfig.spawnCountIncrement * playersRemaining);
 
-		chargedPercent += (int) (currentStage * config.creeperConfig.spawnCountIncrement * playersRemaining);
 		int count = MathHelper.nextInt(random, minCreepers, maxCreepers);
 
 		for (int i = 0; i < count; i++) {
@@ -95,10 +93,11 @@ public class CreeperfallCreeperSpawnLogic {
 
 		CreeperEntity entity = new CreeperfallCreeperEntity(this.world, config.creeperConfig.fallSpeedMultiplier, 0.02, 0.02);
 
-        // Randomise charged creepers
-		if (random.nextInt(100) <= chargedPercent)
-		{
-			((CreeperModel) entity).charge();
+		if (currentStage >= config.creeperConfig.chargedSpawnStage) {
+			int chargedPercent = config.creeperConfig.chargedSpawnPercent;
+			if (chargedPercent >= random.nextInt(100)) {
+				((CreeperModel) entity).charge();
+			}
 		}
 
 		entity.setHealth(0.5f);
