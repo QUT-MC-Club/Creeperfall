@@ -6,6 +6,7 @@ import io.github.redstoneparadox.creeperfall.game.config.CreeperfallConfig;
 import io.github.redstoneparadox.creeperfall.game.map.CreeperfallMap;
 import io.github.redstoneparadox.creeperfall.game.util.EntityTracker;
 import io.github.redstoneparadox.creeperfall.game.util.Timer;
+import io.github.redstoneparadox.creeperfall.models.CreeperModel;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -91,6 +92,13 @@ public class CreeperfallCreeperSpawnLogic {
 		double z = random.nextInt(size - 2) + negativeBound + 1;
 
 		CreeperEntity entity = new CreeperfallCreeperEntity(this.world, config.creeperConfig.fallSpeedMultiplier, 0.02, 0.02);
+
+		if (currentStage >= config.creeperConfig.chargedSpawnStage && config.creeperConfig.chargedSpawnStage != -1) {
+			int chargedPercent = config.creeperConfig.chargedSpawnPercent;
+			if (chargedPercent >= random.nextInt(100)) {
+				((CreeperModel) entity).charge();
+			}
+		}
 
 		entity.setHealth(0.5f);
 		game.spawnEntity(entity, x, y, z, SpawnReason.NATURAL);
